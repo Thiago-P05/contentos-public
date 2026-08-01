@@ -1,0 +1,50 @@
+ContentOS
+Copyright 2026 The ContentOS Authors
+
+This product includes software developed by the ContentOS Authors, licensed
+under the Apache License, Version 2.0. See the LICENSE file for the full terms.
+
+--------------------------------------------------------------------------------
+Third-party dependencies
+--------------------------------------------------------------------------------
+
+ContentOS does not vendor its dependencies; they are resolved from the npm
+registry at install time and each keeps its own license. The dependency tree is
+predominantly MIT, Apache-2.0, ISC and BSD. Notable exceptions worth calling out:
+
+  * lightningcss, lightningcss-win32-x64-msvc — Mozilla Public License 2.0
+    Source: https://github.com/parcel-bundler/lightningcss
+    Reached transitively through Tailwind CSS. MPL-2.0 is file-level copyleft:
+    modifications to those files must be shared, but linking them from
+    Apache-2.0 code imposes no obligation on this project's source.
+
+  * axe-core — Mozilla Public License 2.0
+    Source: https://github.com/dequelabs/axe-core
+    Reached transitively; development/testing only.
+
+  * @img/sharp-* — Apache-2.0, with prebuilt binaries that dynamically link
+    libvips and its LGPL-3.0-or-later dependencies.
+    Source: https://github.com/lovell/sharp
+    Dynamic linking, which is what the LGPL permits without relicensing.
+
+To review the licenses actually resolved for your install:
+
+    pnpm licenses list
+
+--------------------------------------------------------------------------------
+Third-party services
+--------------------------------------------------------------------------------
+
+ContentOS talks to services that are NOT covered by this license and that each
+deployer must obtain and comply with independently: Meta/Instagram Graph API,
+TikTok for Developers, YouTube Data API, Supabase, OpenRouter, Upstash, Langfuse,
+Apify and OpusClip. You are responsible for your own API credentials, quotas,
+platform review processes and terms of service.
+
+--------------------------------------------------------------------------------
+Trademarks
+--------------------------------------------------------------------------------
+
+The Apache License does not grant permission to use the trade names, trademarks
+or product names of contributors, except as required for describing the origin
+of the work (see section 6 of the LICENSE).

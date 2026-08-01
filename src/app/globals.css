@@ -1,0 +1,604 @@
+/* Scan only src/. Without this Tailwind also reads the markdown in
+   Proyectos/ and the snapshots in .artifacts/, where class names quoted as
+   documentation (e.g. a `--r-*` glob) get compiled into invalid CSS. */
+@import "tailwindcss" source("../");
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+/* The app drives theming with a data attribute, not a class. Redefining the
+   variant keeps Tailwind's `dark:` utilities working with our own switch. */
+@custom-variant dark ([data-theme="dark"] &);
+
+/* ---------------------------------------------------------------------------
+   LIGHT — the default. `[data-theme="dark"]` below overrides it, and the
+   anti-FOUC script in layout.tsx always sets the attribute before first paint.
+   Semantics follow shadcn: `--muted` / `--secondary` / `--accent` are SURFACES;
+   text greys are `--muted-foreground` / `--*-foreground`.
+--------------------------------------------------------------------------- */
+:root {
+  color-scheme: light;
+
+  /* Base */
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --surface: oklch(0.97 0 0);
+  --surface-elevated: oklch(0.94 0 0);
+  --surface-hover: oklch(0.91 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+
+  /* Lines */
+  --line: oklch(0.922 0 0);
+  --line-strong: oklch(0.86 0 0);
+  --line-accent: oklch(0.80 0 0);
+
+  /* Surfaces (shadcn semantics) */
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --accent-green: oklch(0.52 0.15 150);
+
+  /* Sidebar */
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+
+  /* Focus */
+  --focus: hsla(212, 100%, 42%, 1);
+  --ring: oklch(0.708 0 0);
+  --focus-ring: 0 0 0 4px rgba(10, 114, 239, 0.20);
+  --ring-offset-background: var(--background);
+
+  /* Semantic */
+  --success: oklch(0.55 0.16 142);
+  --warning: oklch(0.60 0.15 55);
+  --danger: oklch(0.55 0.21 27);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
+  --improvement: oklch(0.55 0.16 250);
+
+  --success-bg: rgba(22, 163, 74, 0.10);
+  --warning-bg: rgba(202, 138, 4, 0.12);
+  --danger-bg: rgba(220, 38, 38, 0.10);
+
+  /* Accent — swap this for your own brand colour. Intentionally identical in
+     both themes, so it has no dark twin. */
+  --brand: #fe0000;
+
+  /* Platform */
+  --platform-instagram: oklch(0.58 0.22 348);
+  --platform-tiktok: oklch(0.62 0.15 210);
+  --platform-youtube: oklch(0.55 0.22 27);
+
+  /* Calendar */
+  --cal-bg: rgba(0, 0, 0, 0.03);
+  --cal-text: oklch(0.145 0 0);
+  --cal-anchor-bg: oklch(0.205 0 0);
+  --cal-anchor-text: oklch(0.985 0 0);
+  --cal-light-shade: rgba(0, 0, 0, 0.05);
+  --cal-dark-shade: rgba(0, 0, 0, 0.03);
+
+  /* Radius — everything derives from --radius (Rhea preset) */
+  --radius: 0.625rem;
+  --r-micro: 4px;
+  --r-xs: 5px;
+  --r-sm: calc(var(--radius) - 4px);
+  --r-md: calc(var(--radius) - 2px);
+  --r-lg: var(--radius);
+  --r-xl: calc(var(--radius) + 4px);
+  --r-pill: 9999px;
+
+  /* Shadows (dark-on-light) */
+  --shadow-border: rgba(0, 0, 0, 0.10) 0px 0px 0px 1px;
+  --shadow-ring-light: rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+  --shadow-card: rgba(0, 0, 0, 0.08) 0px 0px 0px 1px, rgba(0, 0, 0, 0.06) 0px 10px 30px -18px;
+  --shadow-card-full: rgba(0, 0, 0, 0.10) 0px 0px 0px 1px, rgba(0, 0, 0, 0.10) 0px 18px 44px -24px;
+  --shadow-focus: var(--focus-ring), var(--shadow-border);
+  /* Quiet lift for panels — a close contact shadow plus a wide soft one. */
+  --shadow-float:
+    0 1px 2px rgba(0, 0, 0, 0.04),
+    0 4px 12px -6px rgba(0, 0, 0, 0.08),
+    0 16px 40px -24px rgba(0, 0, 0, 0.12);
+
+  /* Misc */
+  --selection: rgba(0, 0, 0, 0.10);
+  --scrollbar-thumb: rgba(0, 0, 0, 0.20);
+  --glass-highlight: rgba(0, 0, 0, 0.02);
+  --scrim: rgba(0, 0, 0, 0.50);
+
+  /* Chart geometry — theme independent */
+  --chart-line-stroke-width: 1.4;
+  --chart-area-fill-opacity: 0.12;
+
+  /* Chart neutrals (Rhea) */
+  --chart-1: oklch(0.269 0 0);
+  --chart-2: oklch(0.371 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.556 0 0);
+  --chart-5: oklch(0.87 0 0);
+
+  /* Chart chrome */
+  --chart-background: oklch(1 0 0);
+  --chart-foreground: oklch(0.40 0 0);
+  --chart-foreground-muted: oklch(0.52 0.01 260);
+  --chart-line-primary: oklch(0.52 0.15 150);
+  --chart-line-secondary: oklch(0.55 0 0);
+  --chart-crosshair: oklch(0.72 0 0);
+  --chart-grid: oklch(0.922 0 0);
+  --chart-tooltip-background: oklch(1 0 0);
+  --chart-tooltip-foreground: oklch(0.145 0 0);
+  --chart-tooltip-muted: oklch(0.556 0 0);
+  --chart-marker-background: oklch(0.94 0 0);
+  --chart-marker-border: oklch(0.80 0 0);
+  --chart-marker-foreground: oklch(0.20 0 0);
+  --chart-ring-background: oklch(0.65 0.01 260 / 0.20);
+  --chart-label: oklch(0.50 0 0);
+
+  /* Chart series — single source of truth, consumed by dashboard-metrics.ts.
+     Tuned down for a white background; the dark block brightens them. */
+  --series-views: oklch(0.55 0.17 149);
+  --series-reach: oklch(0.58 0.13 165);
+  --series-inter: oklch(0.62 0.16 62);
+  --series-profile: oklch(0.55 0.17 253);
+  --series-links: oklch(0.53 0.19 300);
+  --series-follows: oklch(0.55 0.11 185);
+  --series-watch: oklch(0.60 0.17 45);
+  --series-comments: oklch(0.56 0.14 163);
+  --series-likes: oklch(0.62 0.15 90);
+  --series-shares: oklch(0.60 0.17 15);
+  --series-saves: oklch(0.58 0.14 231);
+  --series-retention: oklch(0.65 0.15 92);
+  --series-subs: oklch(0.53 0.19 292);
+  --series-skip: oklch(0.55 0.21 27);
+}
+
+/* ---------------------------------------------------------------------------
+   DARK
+--------------------------------------------------------------------------- */
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* Base */
+  --background: oklch(0.098 0 0);
+  --foreground: oklch(0.985 0 0);
+  --surface: oklch(0.13 0 0);
+  --surface-elevated: oklch(0.16 0 0);
+  --surface-hover: oklch(0.18 0 0);
+  --card: oklch(0.13 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.16 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --border: oklch(0.22 0 0);
+  --input: oklch(0.22 0 0);
+  --primary: oklch(0.985 0 0);
+  --primary-foreground: oklch(0.098 0 0);
+
+  /* Lines */
+  --line: oklch(0.22 0 0);
+  --line-strong: oklch(0.28 0 0);
+  --line-accent: oklch(0.32 0 0);
+
+  /* Surfaces */
+  --secondary: oklch(0.18 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.18 0 0);
+  --accent: oklch(0.18 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --accent-green: oklch(0.7 0.15 150);
+
+  /* Sidebar */
+  --sidebar: oklch(0.11 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(0.22 0 0);
+  --sidebar-primary: oklch(0.985 0 0);
+  --sidebar-primary-foreground: oklch(0.098 0 0);
+  --sidebar-accent: oklch(0.18 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-ring: oklch(0.556 0 0);
+
+  /* Focus */
+  --focus: hsla(212, 100%, 48%, 1);
+  --ring: oklch(0.556 0 0);
+  --focus-ring: 0 0 0 4px rgba(10, 114, 239, 0.18);
+
+  /* Semantic */
+  --success: oklch(0.72 0.19 142);
+  --warning: oklch(0.75 0.18 55);
+  --danger: oklch(0.65 0.22 27);
+  --destructive: oklch(0.704 0.191 22.216);
+  --destructive-foreground: oklch(0.985 0 0);
+  --improvement: oklch(0.80 0.10 250);
+
+  --success-bg: rgba(34, 197, 94, 0.10);
+  --warning-bg: rgba(250, 204, 21, 0.10);
+  --danger-bg: rgba(239, 68, 68, 0.10);
+
+  /* Platform */
+  --platform-instagram: oklch(0.68 0.20 348);
+  --platform-tiktok: oklch(0.75 0.14 200);
+  --platform-youtube: oklch(0.65 0.22 27);
+
+  /* Calendar */
+  --cal-bg: rgba(255, 255, 255, 0.04);
+  --cal-text: oklch(0.985 0 0);
+  --cal-anchor-bg: oklch(0.985 0 0);
+  --cal-anchor-text: oklch(0.098 0 0);
+  --cal-light-shade: rgba(255, 255, 255, 0.06);
+  --cal-dark-shade: rgba(255, 255, 255, 0.04);
+
+  /* Shadows (light-on-dark) */
+  --shadow-border: rgba(255, 255, 255, 0.08) 0px 0px 0px 1px;
+  --shadow-ring-light: rgba(255, 255, 255, 0.08) 0px 0px 0px 1px;
+  --shadow-card: rgba(255, 255, 255, 0.08) 0px 0px 0px 1px, rgba(0, 0, 0, 0.32) 0px 10px 30px -18px;
+  --shadow-card-full: rgba(255, 255, 255, 0.08) 0px 0px 0px 1px, rgba(0, 0, 0, 0.36) 0px 18px 44px -24px;
+  --shadow-float:
+    0 1px 2px rgba(0, 0, 0, 0.30),
+    0 4px 12px -6px rgba(0, 0, 0, 0.45),
+    0 16px 40px -24px rgba(0, 0, 0, 0.65);
+
+  /* Misc */
+  --selection: rgba(255, 255, 255, 0.16);
+  --scrollbar-thumb: rgba(255, 255, 255, 0.20);
+  --glass-highlight: rgba(255, 255, 255, 0.03);
+  --scrim: rgba(0, 0, 0, 0.62);
+
+  /* Chart neutrals (Rhea) */
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+
+  /* Chart chrome */
+  --chart-background: oklch(0.13 0 0);
+  --chart-foreground: oklch(0.55 0 0);
+  --chart-foreground-muted: oklch(0.65 0.01 260);
+  --chart-line-primary: oklch(0.7 0.15 150);
+  --chart-line-secondary: oklch(0.6 0 0);
+  --chart-crosshair: oklch(0.45 0 0);
+  --chart-grid: oklch(0.22 0 0);
+  --chart-tooltip-background: oklch(0.16 0 0);
+  --chart-tooltip-foreground: oklch(0.985 0 0);
+  --chart-tooltip-muted: oklch(0.6 0 0);
+  --chart-marker-background: oklch(0.25 0 0);
+  --chart-marker-border: oklch(0.35 0 0);
+  --chart-marker-foreground: oklch(0.9 0 0);
+  --chart-ring-background: oklch(0.35 0.01 260 / 0.25);
+  --chart-label: oklch(0.6 0 0);
+
+  /* Chart series */
+  --series-views: oklch(0.75 0.19 149);
+  --series-reach: oklch(0.78 0.14 165);
+  --series-inter: oklch(0.78 0.16 62);
+  --series-profile: oklch(0.72 0.14 253);
+  --series-links: oklch(0.72 0.16 300);
+  --series-follows: oklch(0.74 0.12 185);
+  --series-watch: oklch(0.72 0.17 45);
+  --series-comments: oklch(0.75 0.15 163);
+  --series-likes: oklch(0.80 0.15 90);
+  --series-shares: oklch(0.72 0.15 15);
+  --series-saves: oklch(0.75 0.13 231);
+  --series-retention: oklch(0.85 0.15 92);
+  --series-subs: oklch(0.71 0.16 292);
+  --series-skip: oklch(0.65 0.20 27);
+}
+
+/* ---------------------------------------------------------------------------
+   Tailwind token bridge
+--------------------------------------------------------------------------- */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-elevated: var(--surface-elevated);
+  --color-surface-hover: var(--surface-hover);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-ring: var(--ring);
+  --color-ring-offset-background: var(--ring-offset-background);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-line-accent: var(--line-accent);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent-green: var(--accent-green);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-focus: var(--focus);
+  --color-warning: var(--warning);
+  --color-warning-bg: var(--warning-bg);
+  --color-danger: var(--danger);
+  --color-danger-bg: var(--danger-bg);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-bg: var(--success-bg);
+  --color-improvement: var(--improvement);
+  --color-brand: var(--brand);
+  --color-platform-instagram: var(--platform-instagram);
+  --color-platform-tiktok: var(--platform-tiktok);
+  --color-platform-youtube: var(--platform-youtube);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-chart-background: var(--chart-background);
+  --color-chart-foreground: var(--chart-foreground);
+  --color-chart-foreground-muted: var(--chart-foreground-muted);
+  --color-chart-line-primary: var(--chart-line-primary);
+  --color-chart-line-secondary: var(--chart-line-secondary);
+  --color-chart-crosshair: var(--chart-crosshair);
+  --color-chart-grid: var(--chart-grid);
+  --color-chart-tooltip-background: var(--chart-tooltip-background);
+  --color-chart-tooltip-foreground: var(--chart-tooltip-foreground);
+  --color-chart-tooltip-muted: var(--chart-tooltip-muted);
+  --color-chart-marker-background: var(--chart-marker-background);
+  --color-chart-marker-border: var(--chart-marker-border);
+  --color-chart-marker-foreground: var(--chart-marker-foreground);
+  --color-chart-ring-background: var(--chart-ring-background);
+  --color-chart-label: var(--chart-label);
+
+  --color-series-views: var(--series-views);
+  --color-series-reach: var(--series-reach);
+  --color-series-inter: var(--series-inter);
+  --color-series-profile: var(--series-profile);
+  --color-series-links: var(--series-links);
+  --color-series-follows: var(--series-follows);
+  --color-series-watch: var(--series-watch);
+  --color-series-comments: var(--series-comments);
+  --color-series-likes: var(--series-likes);
+  --color-series-shares: var(--series-shares);
+  --color-series-saves: var(--series-saves);
+  --color-series-retention: var(--series-retention);
+  --color-series-subs: var(--series-subs);
+  --color-series-skip: var(--series-skip);
+
+  --font-sans: var(--font-sans);
+  --font-heading: var(--font-heading);
+  --font-mono: var(--font-mono);
+
+  --shadow-float: var(--shadow-float);
+
+  --radius-sm: var(--r-sm);
+  --radius-md: var(--r-md);
+  --radius-lg: var(--r-lg);
+  --radius-xl: var(--r-xl);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+/* Type scale — `@theme` (not inline) so the values are emitted as real
+   custom properties and can be referenced with var() outside utilities. */
+@theme {
+  --text-micro: 0.5625rem;   /* 9px  */
+  --text-label: 0.625rem;    /* 10px */
+  --text-caption: 0.6875rem; /* 11px */
+  --text-body-sm: 0.75rem;   /* 12px */
+  --text-body: 0.8125rem;    /* 13px */
+  --text-lead: 0.875rem;     /* 14px */
+  --text-title: 1.0625rem;   /* 17px */
+
+  /* Project tracking scale. Deliberately not named tight/wide/wider so it
+     does not redefine Tailwind's core letter-spacing utilities. */
+  --tracking-display: -0.04em;
+  --tracking-snug: -0.02em;
+  --tracking-label: 0.12em;
+  --tracking-caps: 0.2em;
+  --tracking-caps-wide: 0.28em;
+}
+
+/* ---------------------------------------------------------------------------
+   Base
+--------------------------------------------------------------------------- */
+@layer base {
+  * {
+    box-sizing: border-box;
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    min-height: 100%;
+    background: var(--background);
+    @apply font-sans;
+  }
+
+  body {
+    min-height: 100vh;
+    font-size: var(--text-lead);
+    font-feature-settings: "liga" 1;
+    @apply bg-background text-foreground;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    letter-spacing: var(--tracking-display);
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+    outline-color: var(--focus);
+  }
+
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+    box-shadow: var(--focus-ring);
+  }
+
+  ::selection { background: var(--selection); }
+
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border-radius: var(--r-pill);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Design-system components.
+   These live in @layer components so Tailwind utilities can override them.
+--------------------------------------------------------------------------- */
+@layer components {
+
+  .ds-card,
+  .glass-panel {
+    background: var(--card);
+    border: 0;
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-border), var(--shadow-float);
+    transition: box-shadow 0.18s ease, background-color 0.18s ease;
+  }
+
+  .ds-card:hover,
+  .glass-panel:hover {
+    background: var(--surface-elevated);
+    box-shadow: var(--shadow-border), var(--shadow-card-full);
+  }
+
+  .ds-card-muted,
+  .panel-elevated {
+    background: var(--surface-elevated);
+    border: 0;
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-border), var(--shadow-float);
+  }
+
+
+
+
+
+
+
+
+
+  .ds-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    font-weight: 500;
+    line-height: 1.3;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--muted-foreground);
+    font-feature-settings: "liga" 1, "tnum" 1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ds-metric {
+    font-family: var(--font-mono);
+    font-size: var(--text-title);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: var(--tracking-display);
+    font-variant-numeric: tabular-nums;
+  }
+
+
+
+
+  .modal-scrim { background: var(--scrim); }
+
+
+  .status-dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .status-dot--ready { background: var(--success); animation: pulse-dot 2.4s ease infinite; }
+  .status-dot--fallback { background: var(--warning); }
+  .status-dot--failed { background: var(--danger); }
+  .status-dot--pending { background: var(--muted-foreground); }
+
+  .metric-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: var(--r-sm);
+    flex-shrink: 0;
+    background: var(--surface-elevated);
+    box-shadow: var(--shadow-ring-light);
+  }
+
+  .comparison-up { color: var(--success); }
+  .comparison-down { color: var(--danger); }
+  .comparison-flat { color: var(--muted-foreground); }
+}
+
+/* ---------------------------------------------------------------------------
+   Animations
+--------------------------------------------------------------------------- */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+  from { background-position: -200% 0; }
+  to { background-position: 200% 0; }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+/* Prefixed to avoid colliding with tw-animate-css's `animate-in` and with
+   Tailwind's own numeric `delay-*` (which sets transition-delay). */
+@utility ds-animate-in { animation: fade-in 0.35s cubic-bezier(0.4, 0, 0.2, 1) both; }
+
+@utility ds-delay-1 { animation-delay: 50ms; }
+@utility ds-delay-2 { animation-delay: 100ms; }
+@utility ds-delay-3 { animation-delay: 150ms; }
+@utility ds-delay-4 { animation-delay: 200ms; }
+@utility ds-delay-5 { animation-delay: 250ms; }
+@utility ds-delay-6 { animation-delay: 300ms; }

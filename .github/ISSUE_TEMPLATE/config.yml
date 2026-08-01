@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+# No contact_links here on purpose: GitHub renders them as absolute URLs, and
+# this repository's own Security tab is the right destination for a
+# vulnerability report. Pointing at a hardcoded URL would either be wrong for
+# forks or send people to a generic GitHub page. SECURITY.md explains the flow.

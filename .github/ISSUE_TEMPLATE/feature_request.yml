@@ -1,0 +1,40 @@
+name: Feature request
+description: Suggest a change or addition
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ContentOS is deliberately **single-user and self-hosted**. Proposals that
+        assume a multi-tenant SaaS are out of scope without the full
+        data-ownership rewrite — see the README's Limitations.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem are you trying to solve?
+      description: Describe the situation, not the solution you have in mind.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What would you like to see?
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: What have you tried or considered instead?
+
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Scope check
+      options:
+        - label: This works for a single-user, self-hosted deployment.
+          required: true
+        - label: I have checked plans/README.md in case it is already planned.
+          required: true
